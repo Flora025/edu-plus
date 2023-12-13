@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>edu-plus-parent</artifactId>
+        <groupId>com.edu</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../edu-plus-parent</relativePath>
+    </parent>
+    <artifactId>edu-plus-content</artifactId>
+    <name>edu-plus-content</name>
+    <description>edu-plus-content</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>edu-plus-content-api</module>
+        <module>edu-plus-content-model</module>
+        <module>edu-plus-content-service</module>
+    </modules>
+</project>
