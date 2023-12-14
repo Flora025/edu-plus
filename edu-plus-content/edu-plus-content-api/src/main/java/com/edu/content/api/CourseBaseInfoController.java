@@ -30,6 +30,6 @@ public class CourseBaseInfoController {
         List<CourseBase> courseBases = new ArrayList<>();
         courseBases.add(courseBase);
 
-        return new PageResult<CourseBase>(courseBases,10,1,10); // TODO
+        return new PageResult<CourseBase>(courseBases,10,1,10);
     }
 }
