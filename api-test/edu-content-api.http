@@ -1,0 +1,9 @@
+### query: 查询课程列表 分页
+POST {{content_host}}/content/course/list
+Content-Type: application/json
+
+{
+  "auditStatus": "202004",
+  "courseName": "1",
+  "publishStatus": "203002"
+}
