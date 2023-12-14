@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseBaseInfoController {
 
     @RequestMapping("/course/list")
-    public PageResult<CourseBase> list(PageParams pageParams, @RequestBody QueryCourseParamsDto queryCourseParamsDto) {
+    public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDto queryCourseParamsDto) {
         return null; // TODO
     }
 }
