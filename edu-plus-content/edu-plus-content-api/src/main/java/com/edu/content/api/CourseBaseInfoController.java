@@ -27,10 +27,9 @@ public class CourseBaseInfoController {
         CourseBase courseBase = new CourseBase();
         courseBase.setName("测试名称");
         courseBase.setCreateDate(LocalDateTime.now());
-        List<CourseBase> courseBases = new ArrayList();
+        List<CourseBase> courseBases = new ArrayList<>();
         courseBases.add(courseBase);
-        PageResult pageResult = new PageResult<CourseBase>(courseBases,10,1,10);
 
-        return pageResult; // TODO
+        return new PageResult<CourseBase>(courseBases,10,1,10); // TODO
     }
 }
