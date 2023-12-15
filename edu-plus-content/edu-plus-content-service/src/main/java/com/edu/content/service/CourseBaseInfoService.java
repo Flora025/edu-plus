@@ -22,4 +22,12 @@ public interface CourseBaseInfoService {
      * @param addCourseDto
      */
     CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto addCourseDto);
+
+    /**
+     * 获取课程基本信息
+     * @param courseId 课程id
+     * @return 课程基本信息类
+     */
+    CourseBaseInfoDto getCourseBase(Long courseId);
+
 }

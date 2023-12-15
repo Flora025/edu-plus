@@ -138,8 +138,10 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
             throw new EduPlusException("保存课程营销信息失败");
         }
 
-        return getCourseBaseInfo(courseBase.getId());
+        return getCourseBase(courseBase.getId());
     }
+
+
 
     /**
      * 保存课程营销信息
@@ -179,7 +181,8 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
      * @param courseId 课程id
      * @return 课程info dto（包括base info和market info）
      */
-    private CourseBaseInfoDto getCourseBaseInfo(long courseId) {
+    @Override
+    public CourseBaseInfoDto getCourseBase(Long courseId) {
         // get base info (required)
         CourseBase courseBase = courseBaseMapper.selectById(courseId);
         if (courseBase == null) {
@@ -204,6 +207,9 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
         return courseBaseInfoDto;
     }
+
+
+
 }
 
 

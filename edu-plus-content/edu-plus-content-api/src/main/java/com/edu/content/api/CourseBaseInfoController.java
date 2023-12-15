@@ -12,9 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "Course info interface",tags = "Course info interface")
 @RestController // 返回一个对象而不是视图
@@ -36,6 +34,12 @@ public class CourseBaseInfoController {
         // TODO: 暂时hardcode
          Long companyId = 1232141425L;
         return courseBaseInfoService.createCourseBase(companyId, addCourseDto);
+    }
+
+    @ApiOperation("根据课程id查询课程基础信息")
+    @GetMapping("/course/{courseId}")
+    public CourseBaseInfoDto getCourseBase(@PathVariable Long courseId) {
+        return null;
     }
 
 }
