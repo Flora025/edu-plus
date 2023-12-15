@@ -15,7 +15,6 @@ import java.util.List;
  * 数据字典 服务实现类
  * </p>
  *
- * @author itcast
  */
 @Slf4j
 @Service
@@ -25,7 +24,6 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Diction
     public List<Dictionary> queryAll() {
 
         List<Dictionary> list = this.list();
-
 
         return list;
     }

@@ -10,3 +10,49 @@ Content-Type: application/json
 
 ### query: 分类查询
 GET {{content_host}}/content/course-category/tree-nodes
+
+### 新增课程基本信息
+POST {{content_host}}/content/course
+Content-Type: application/json
+
+{
+  "charge": "201001",
+  "price": 10,
+  "originalPrice": 100,
+  "qq": "22333",
+  "wechat": "223344",
+  "phone": "13333333",
+  "validDays": 365,
+  "mt": "1-1",
+  "st": "1-1-1",
+  "name": "jvav高级",
+  "pic": "fdsfdga",
+  "teachmode": "200002",
+  "users": "初级人员",
+  "tags": "tagstags",
+  "grade": "204001",
+  "description": "jvav java jvav java"
+}
+
+### 测试异常
+POST {{content_host}}/content/course
+Content-Type: application/json
+
+{
+  "charge": "201001",
+  "price": 10,
+  "originalPrice": 100,
+  "qq": "22333",
+  "wechat": "223344",
+  "phone": "13333333",
+  "validDays": 365,
+  "mt": "1-1",
+  "st": "1-1-1",
+  "name": "",
+  "pic": "fdsfdga",
+  "teachmode": "200002",
+  "users": "初级人员",
+  "tags": "tagstags",
+  "grade": "204001",
+  "description": "jvav java jvav java"
+}

@@ -2,6 +2,7 @@ package com.edu.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.edu.base.exception.EduPlusException;
 import com.edu.base.model.PageParams;
 import com.edu.base.model.PageResult;
 import com.edu.content.mapper.CourseBaseMapper;
@@ -80,31 +81,31 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 1. validate data
 
         if (StringUtils.isBlank(dto.getName())) {
-            throw new RuntimeException("课程名称为空");
+            EduPlusException.cast("课程名称为空");
         }
 
         if (StringUtils.isBlank(dto.getMt())) {
-            throw new RuntimeException("课程分类为空");
+            EduPlusException.cast("课程分类为空");
         }
 
         if (StringUtils.isBlank(dto.getSt())) {
-            throw new RuntimeException("课程分类为空");
+            EduPlusException.cast("课程分类为空");
         }
 
         if (StringUtils.isBlank(dto.getGrade())) {
-            throw new RuntimeException("课程等级为空");
+            EduPlusException.cast("课程等级为空");
         }
 
         if (StringUtils.isBlank(dto.getTeachmode())) {
-            throw new RuntimeException("教育模式为空");
+            EduPlusException.cast("教育模式为空");
         }
 
         if (StringUtils.isBlank(dto.getUsers())) {
-            throw new RuntimeException("适应人群为空");
+            EduPlusException.cast("适应人群为空");
         }
 
         if (StringUtils.isBlank(dto.getCharge())) {
-            throw new RuntimeException("收费规则为空");
+            EduPlusException.cast("收费规则为空");
         }
 
         // 2. save course base info
@@ -134,7 +135,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
         int saved = saveCourseMarket(courseMarket);
         if (saved <= 0) {
-            throw new RuntimeException("保存课程营销信息失败");
+            throw new EduPlusException("保存课程营销信息失败");
         }
 
         return getCourseBaseInfo(courseBase.getId());
