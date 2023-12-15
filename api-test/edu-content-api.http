@@ -40,14 +40,14 @@ Content-Type: application/json
 
 {
   "charge": "201001",
-  "price": 10,
+  "price": -1,
   "originalPrice": 100,
   "qq": "22333",
   "wechat": "223344",
   "phone": "13333333",
   "validDays": 365,
-  "mt": "1-1",
-  "st": "1-1-1",
+  "mt": "",
+  "st": "",
   "name": "",
   "pic": "fdsfdga",
   "teachmode": "200002",
