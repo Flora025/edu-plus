@@ -3,6 +3,8 @@ package com.edu.content.api;
 
 import com.edu.base.model.PageParams;
 import com.edu.base.model.PageResult;
+import com.edu.content.model.dto.AddCourseDto;
+import com.edu.content.model.dto.CourseBaseInfoDto;
 import com.edu.content.model.dto.QueryCourseParamsDto;
 import com.edu.content.model.po.CourseBase;
 import com.edu.content.service.CourseBaseInfoService;
@@ -25,6 +27,12 @@ public class CourseBaseInfoController {
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody QueryCourseParamsDto queryCourseParams){
         PageResult<CourseBase> pageResult = courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParams);
         return pageResult;
+    }
+
+    @ApiOperation("新增课程基础信息")
+    @PostMapping("/course")
+    public CourseBaseInfoDto createCourseBase(@RequestBody AddCourseDto addCourseDto) {
+        return null;
     }
 
 }

@@ -20,11 +20,12 @@
 
     <select id="selectTreeNodes" resultType="com.edu.content.model.dto.CourseCategoryTreeDto" parameterType="string">
         with recursive t1 as (
-            select * from course_category p where id = #{id}
+            select * from  course_category p where  id= #{id}
             union all
-            select t.* from course_category t inner join t1 on t.parentid = t1.id
+            select t.* from course_category t inner join t1 on t1.id = t.parentid
         )
-        select * from t1 order by t1.id, t1.orderby
+        select *  from t1 order by t1.id, t1.orderby
     </select>
+
 
 </mapper>
