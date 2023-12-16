@@ -93,3 +93,6 @@ Content-Type: application/json
   "grade" : 1,
   "pname" : "新章名称 [点击修改]"
 }
+
+### 删除课程计划
+DELETE {{content_host}}/content/teachplan/43
