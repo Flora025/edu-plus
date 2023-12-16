@@ -16,7 +16,7 @@ public interface CourseTeacherService {
      * @param addCourseTeacherDto 教师信息请求dto
      * @return 新增的课程教师信息
      */
-    public CourseTeacher addCourseTeacher(AddCourseTeacherDto addCourseTeacherDto);
+    public CourseTeacher addCourseTeacher(Long companyId, AddCourseTeacherDto addCourseTeacherDto);
 
     /**
      * 修改教师信息
@@ -30,5 +30,5 @@ public interface CourseTeacherService {
      * @param courseId 课程id
      * @param teacherId 教师id
      */
-    public void deleteCourseTeacher(Long courseId, Long teacherId);
+    public void deleteCourseTeacher(Long companyId, Long courseId, Long teacherId);
 }

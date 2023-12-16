@@ -28,7 +28,8 @@ public class CourseTeacherController {
     @ApiOperation("添加课程教师")
     @PostMapping("/courseTeacher")
     public CourseTeacher addCourseTeacher(@RequestBody @Validated AddCourseTeacherDto addCourseTeacherDto) {
-        return courseTeacherService.addCourseTeacher(addCourseTeacherDto);
+        Long companyId = 1232141425L;
+        return courseTeacherService.addCourseTeacher(companyId, addCourseTeacherDto);
     }
 
     @ApiOperation("修改课程教师信息")
@@ -40,6 +41,7 @@ public class CourseTeacherController {
     @ApiOperation("删除课程教师信息")
     @DeleteMapping("/courseTeacher/course/{courseId}/{teacherId}")
     public void deleteCourseTeacher(@PathVariable Long courseId, @PathVariable Long teacherId) {
-        courseTeacherService.deleteCourseTeacher(courseId, teacherId);
+        Long companyId = 1232141425L;
+        courseTeacherService.deleteCourseTeacher(companyId, courseId, teacherId);
     }
 }

@@ -2,8 +2,10 @@ package com.edu.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edu.base.exception.EduPlusException;
+import com.edu.content.mapper.CourseBaseMapper;
 import com.edu.content.mapper.CourseTeacherMapper;
 import com.edu.content.model.dto.AddCourseTeacherDto;
+import com.edu.content.model.po.CourseBase;
 import com.edu.content.model.po.CourseTeacher;
 import com.edu.content.service.CourseTeacherService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,9 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
     @Autowired
     CourseTeacherMapper courseTeacherMapper;
 
+    @Autowired
+    CourseBaseMapper courseBaseMapper;
+
     @Override
     public List<CourseTeacher> getCourseTeacher(Long courseId) {
         LambdaQueryWrapper<CourseTeacher> queryWrapper = new LambdaQueryWrapper<>();
@@ -37,7 +42,13 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
      */
     @Transactional
     @Override
-    public CourseTeacher addCourseTeacher(AddCourseTeacherDto addCourseTeacherDto) {
+    public CourseTeacher addCourseTeacher(Long companyId, AddCourseTeacherDto addCourseTeacherDto) {
+        // validate
+        CourseBase courseBase = courseBaseMapper.selectById(addCourseTeacherDto.getCourseId());
+        if (!companyId.equals(courseBase.getCompanyId())) {
+            EduPlusException.cast("只允许向机构自己的课程中添加老师、删除老师。");
+        }
+
         // create teacher
         CourseTeacher courseTeacher = new CourseTeacher();
         BeanUtils.copyProperties(addCourseTeacherDto, courseTeacher);
@@ -69,7 +80,7 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
         }
 
         CourseTeacher courseTeacherNew = new CourseTeacher();
-        BeanUtils.copyProperties(courseTeacherCur, courseTeacherNew);
+        BeanUtils.copyProperties(courseTeacher, courseTeacherNew);
 
         int i = courseTeacherMapper.updateById(courseTeacherNew);
         if (i <= 0) {
@@ -85,11 +96,18 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
      */
     @Transactional
     @Override
-    public void deleteCourseTeacher(Long courseId, Long teacherId) {
+    public void deleteCourseTeacher(Long companyId, Long courseId, Long teacherId) {
+        // validate
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (!companyId.equals(courseBase.getCompanyId())) {
+            EduPlusException.cast("只允许向机构自己的课程中添加老师、删除老师。");
+        }
+
         // create query
         LambdaQueryWrapper<CourseTeacher> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(CourseTeacher::getCourseId, courseId);
         queryWrapper.eq(CourseTeacher::getId, teacherId);
+
 
         // delete teacher by query
         int delete = courseTeacherMapper.delete(queryWrapper);
