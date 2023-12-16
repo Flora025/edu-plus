@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,12 +35,14 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
      * @param addCourseTeacherDto 教师信息请求dto
      * @return 教师信息
      */
+    @Transactional
     @Override
     public CourseTeacher addCourseTeacher(AddCourseTeacherDto addCourseTeacherDto) {
         // create teacher
         CourseTeacher courseTeacher = new CourseTeacher();
         BeanUtils.copyProperties(addCourseTeacherDto, courseTeacher);
         courseTeacher.setCreateDate(LocalDateTime.now());
+
 
         // insert into db
         int i = courseTeacherMapper.insert(courseTeacher);
@@ -56,15 +59,42 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
      * @param courseTeacher 教师信息
      * @return 修改后的教师信息
      */
+    @Transactional
     @Override
     public CourseTeacher editCourseTeacher(CourseTeacher courseTeacher) {
+        Long teacherId = courseTeacher.getId();
+        CourseTeacher courseTeacherCur = courseTeacherMapper.selectById(teacherId);
+        if (courseTeacherCur == null) {
+            EduPlusException.cast("教师不存在");
+        }
+
         CourseTeacher courseTeacherNew = new CourseTeacher();
-        BeanUtils.copyProperties(courseTeacher, courseTeacherNew);
+        BeanUtils.copyProperties(courseTeacherCur, courseTeacherNew);
 
         int i = courseTeacherMapper.updateById(courseTeacherNew);
         if (i <= 0) {
             EduPlusException.cast("修改教师信息失败");
         }
         return courseTeacherMapper.selectById(courseTeacherNew.getId());
+    }
+
+    /**
+     * 删除教师信息
+     * @param courseId 课程id
+     * @param teacherId 教师id
+     */
+    @Transactional
+    @Override
+    public void deleteCourseTeacher(Long courseId, Long teacherId) {
+        // create query
+        LambdaQueryWrapper<CourseTeacher> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CourseTeacher::getCourseId, courseId);
+        queryWrapper.eq(CourseTeacher::getId, teacherId);
+
+        // delete teacher by query
+        int delete = courseTeacherMapper.delete(queryWrapper);
+        if (delete <= 0) {
+            EduPlusException.cast("删除教师失败");
+        }
     }
 }

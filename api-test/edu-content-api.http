@@ -118,11 +118,18 @@ PUT {{content_host}}/content/courseTeacher
 Content-Type: application/json
 
 {
-"id": 21,
-"courseId": 75,
-"teacherName": "新老师",
-"position": "教师职位new",
-"introduction": "教师简介new",
+"id": 22,
+"courseId": 1,
+"teacherName": "小张老师",
+"position": "校长",
+"introduction": "优秀素质。",
 "photograph": null,
-"createDate": null
+"createDate": "2023-12-16 16:33:36"
 }
+
+22,1,小张老师,校长,优秀素质,,2023-12-16 16:33:36
+
+
+
+### 删除教师信息
+DELETE {{content_host}}/content/courseTeacher/course/75/21

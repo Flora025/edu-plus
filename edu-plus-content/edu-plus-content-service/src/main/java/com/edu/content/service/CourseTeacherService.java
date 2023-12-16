@@ -24,4 +24,11 @@ public interface CourseTeacherService {
      * @return 修改后的教师信息
      */
     public CourseTeacher editCourseTeacher(CourseTeacher courseTeacher);
+
+    /**
+     * 删除教师信息
+     * @param courseId 课程id
+     * @param teacherId 教师id
+     */
+    public void deleteCourseTeacher(Long courseId, Long teacherId);
 }
