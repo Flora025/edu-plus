@@ -5,6 +5,7 @@ import com.edu.base.model.PageParams;
 import com.edu.base.model.PageResult;
 import com.edu.content.model.dto.AddCourseDto;
 import com.edu.content.model.dto.CourseBaseInfoDto;
+import com.edu.content.model.dto.EditCourseDto;
 import com.edu.content.model.dto.QueryCourseParamsDto;
 import com.edu.content.model.po.CourseBase;
 import com.edu.content.service.CourseBaseInfoService;
@@ -39,7 +40,16 @@ public class CourseBaseInfoController {
     @ApiOperation("根据课程id查询课程基础信息")
     @GetMapping("/course/{courseId}")
     public CourseBaseInfoDto getCourseBase(@PathVariable Long courseId) {
-        return null;
+        return courseBaseInfoService.getCourseBase(courseId);
     }
+
+    @ApiOperation("修改课程基础信息")
+    @PutMapping("/course")
+    public CourseBaseInfoDto modifyCourseBase(@RequestBody @Validated EditCourseDto editCourseDto){
+        // TODO: 暂时hardcode
+        Long companyId = 1232141425L;
+        return courseBaseInfoService.editCourseBase(companyId, editCourseDto);
+    }
+
 
 }

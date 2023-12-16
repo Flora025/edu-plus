@@ -10,6 +10,7 @@ import com.edu.content.mapper.CourseCategoryMapper;
 import com.edu.content.mapper.CourseMarketMapper;
 import com.edu.content.model.dto.AddCourseDto;
 import com.edu.content.model.dto.CourseBaseInfoDto;
+import com.edu.content.model.dto.EditCourseDto;
 import com.edu.content.model.dto.QueryCourseParamsDto;
 import com.edu.content.model.po.CourseBase;
 import com.edu.content.model.po.CourseCategory;
@@ -208,8 +209,40 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         return courseBaseInfoDto;
     }
 
+    @Transactional
+    @Override
+    public CourseBaseInfoDto editCourseBase(Long companyId, EditCourseDto dto) {
+        // validate
+        Long courseId = dto.getId();
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null) {
+            EduPlusException.cast("课程不存在");
+        }
 
+        // validate company id (company A should not edit B's course)
+        if (!companyId.equals(courseBase.getCompanyId())) {
+            EduPlusException.cast("本机构只能修改本机构的课程");
+        }
 
+        // copy data into cb object
+        BeanUtils.copyProperties(dto, courseBase);
+        courseBase.setChangeDate(LocalDateTime.now()); // overwrite update time
+
+        // update data
+        int update = courseBaseMapper.updateById(courseBase);
+        if (update <= 0) {
+            EduPlusException.cast("修改课程信息失败");
+        }
+
+        // 封装course market
+        CourseMarket courseMarket = new CourseMarket();
+        BeanUtils.copyProperties(dto, courseMarket);
+        saveCourseMarket(courseMarket);
+        // course base info
+        CourseBaseInfoDto courseBaseInfo = this.getCourseBase(courseId);
+
+        return courseBaseInfo;
+    }
 }
 
 
