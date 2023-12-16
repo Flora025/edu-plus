@@ -12,5 +12,5 @@ import java.util.List;
 public class TeachplanDto extends Teachplan {
     TeachplanMedia teachplanMedia;
 
-    List<TeachplanDto> teachplanTreeNodes;
+    List<TeachplanDto> teachPlanTreeNodes;
 }
