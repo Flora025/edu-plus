@@ -31,4 +31,10 @@ public class CourseTeacherController {
         return courseTeacherService.addCourseTeacher(addCourseTeacherDto);
     }
 
+    @ApiOperation("修改课程教师信息")
+    @PutMapping("/courseTeacher")
+    public CourseTeacher editCourseTeacher(@RequestBody @Validated CourseTeacher courseTeacher) {
+        return courseTeacherService.editCourseTeacher(courseTeacher);
+    }
+
 }

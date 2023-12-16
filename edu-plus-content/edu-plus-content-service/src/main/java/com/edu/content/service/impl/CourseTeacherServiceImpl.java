@@ -50,4 +50,21 @@ public class CourseTeacherServiceImpl implements CourseTeacherService {
         // query and return
         return courseTeacherMapper.selectById(courseTeacher.getId());
     }
+
+    /**
+     * 修改教师信息
+     * @param courseTeacher 教师信息
+     * @return 修改后的教师信息
+     */
+    @Override
+    public CourseTeacher editCourseTeacher(CourseTeacher courseTeacher) {
+        CourseTeacher courseTeacherNew = new CourseTeacher();
+        BeanUtils.copyProperties(courseTeacher, courseTeacherNew);
+
+        int i = courseTeacherMapper.updateById(courseTeacherNew);
+        if (i <= 0) {
+            EduPlusException.cast("修改教师信息失败");
+        }
+        return courseTeacherMapper.selectById(courseTeacherNew.getId());
+    }
 }

@@ -17,4 +17,11 @@ public interface CourseTeacherService {
      * @return 新增的课程教师信息
      */
     public CourseTeacher addCourseTeacher(AddCourseTeacherDto addCourseTeacherDto);
+
+    /**
+     * 修改教师信息
+     * @param courseTeacher 教师信息
+     * @return 修改后的教师信息
+     */
+    public CourseTeacher editCourseTeacher(CourseTeacher courseTeacher);
 }

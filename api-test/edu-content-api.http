@@ -112,3 +112,17 @@ Content-Type: application/json
   "position": "教师职位",
   "introduction": "教师简介"
 }
+
+### 修改教师信息
+PUT {{content_host}}/content/courseTeacher
+Content-Type: application/json
+
+{
+"id": 21,
+"courseId": 75,
+"teacherName": "新老师",
+"position": "教师职位new",
+"introduction": "教师简介new",
+"photograph": null,
+"createDate": null
+}
