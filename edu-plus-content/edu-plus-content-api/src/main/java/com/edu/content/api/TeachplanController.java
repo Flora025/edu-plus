@@ -40,4 +40,12 @@ public class TeachplanController {
     public void deleteTeachplan(@PathVariable Long planId) {
         teachplanService.deleteTeachplan(planId);
     }
+
+    @ApiOperation("移动课程计划")
+    @ApiImplicitParam(value = "planId", name = "计划Id", required = true, dataType = "Long", paramType = "path")
+    @PostMapping("/teachplan/{direction}/{planId}")
+    public void moveTeachplan(@PathVariable String direction, @PathVariable Long planId) {
+        teachplanService.moveTeachplan(direction, planId);
+    }
+
 }

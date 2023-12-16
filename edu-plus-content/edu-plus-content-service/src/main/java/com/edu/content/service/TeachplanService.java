@@ -24,4 +24,11 @@ public interface TeachplanService {
      * @param planId plan id
      */
     public void deleteTeachplan(Long planId);
+
+    /**
+     * 移动课程计划
+     * @param direction 移动方向
+     * @param planId 计划id
+     */
+    public void moveTeachplan(String direction, Long planId);
 }

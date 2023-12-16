@@ -12,6 +12,7 @@ import com.edu.content.service.TeachplanService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class TeachplanServiceImpl implements TeachplanService {
         return teachplanMapper.selectTreeNodes(courseId);
     }
 
+    @Transactional
     @Override
     public void saveTeachplan(SaveTeachplanDto saveTeachplanDto) {
         Long planId = saveTeachplanDto.getId();
@@ -59,10 +61,25 @@ public class TeachplanServiceImpl implements TeachplanService {
     private int getTeachplanCount(Long courseId, Long parentId) {
         // sql: select count(1) from teachplan where course_id=117 and parentid=268
         LambdaQueryWrapper<Teachplan> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Teachplan::getCourseId,courseId);
-        queryWrapper.eq(Teachplan::getParentid,parentId);
+        queryWrapper.eq(Teachplan::getCourseId, courseId);
+        queryWrapper.eq(Teachplan::getParentid, parentId);
 
         return teachplanMapper.selectCount(queryWrapper);
+    }
+
+    /**
+     * 获取指定parent下同级别所有plan
+     * @param courseId
+     * @param parentId
+     * @return list of plans
+     */
+    private List<Teachplan> getTeachplans(Long courseId, Long parentId) {
+        LambdaQueryWrapper<Teachplan> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Teachplan::getCourseId, courseId);
+        queryWrapper.eq(Teachplan::getParentid, parentId);
+        queryWrapper.orderByAsc(Teachplan::getOrderby);
+
+        return teachplanMapper.selectList(queryWrapper);
     }
 
     /**
@@ -71,6 +88,7 @@ public class TeachplanServiceImpl implements TeachplanService {
      * 对于小章节，会将teachplan_media表关联的信息也删除
      * @param planId plan id
      */
+    @Transactional
     @Override
     public void deleteTeachplan(Long planId) {
         Teachplan teachplan = teachplanMapper.selectById(planId);
@@ -103,6 +121,52 @@ public class TeachplanServiceImpl implements TeachplanService {
             if (i <= 0) {
                 EduPlusException.cast("课程章节删除失败");
             }
+        }
+    }
+
+    /**
+     * 移动课程计划章节
+     * @param direction 移动方向
+     * @param planId 计划id
+     */
+    @Transactional
+    @Override
+    public void moveTeachplan(String direction, Long planId) {
+        // 查询当前plan
+        Teachplan teachplan = teachplanMapper.selectById(planId);
+
+        // 获得当前层级的所有teach plan
+        List<Teachplan> teachplans = getTeachplans(teachplan.getCourseId(), teachplan.getParentid());
+
+        // 获取目标排序信息
+        Integer curOrder = teachplan.getOrderby();
+        Integer targetOrder;
+        if (direction.equals("moveup")) {
+            if (curOrder == 1) {
+                return; // 第一个 无法继续网上
+            }
+            targetOrder = curOrder - 1;
+        } else {
+            if (curOrder == teachplans.size()) {
+                return; // 最后一个 无法继续往下
+            }
+            targetOrder = curOrder + 1;
+        }
+
+        // 找到需要交换位置的teachplan
+        Teachplan targetTeachplan = teachplans.get(targetOrder - 1);
+
+        // 交换排序信息
+        targetTeachplan.setOrderby(curOrder);
+        teachplan.setOrderby(targetOrder);
+
+        int targetUpdate = teachplanMapper.updateById(targetTeachplan);
+        if (targetUpdate <= 0) {
+            EduPlusException.cast("移动失败");
+        }
+        int curUpdate = teachplanMapper.updateById(teachplan);
+        if (curUpdate <= 0) {
+            EduPlusException.cast("移动失败");
         }
     }
 }
