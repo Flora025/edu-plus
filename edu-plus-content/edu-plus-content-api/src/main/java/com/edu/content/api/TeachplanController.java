@@ -22,7 +22,7 @@ public class TeachplanController {
     TeachplanService teachplanService;
 
     @ApiOperation("查询课程计划树形结构")
-    @ApiImplicitParam(value = "courseId",name = "课程Id",required = true,dataType = "Long",paramType = "path")
+    @ApiImplicitParam(value = "courseId", name = "课程Id", required = true, dataType = "Long", paramType = "path")
     @GetMapping("/teachplan/{courseId}/tree-nodes")
     public List<TeachplanDto> getTreeNodes(@PathVariable Long courseId) {
         return teachplanService.getTeachplanTreeNodes(courseId);
@@ -32,5 +32,12 @@ public class TeachplanController {
     @PostMapping("/teachplan")
     public void saveTeachplan(@RequestBody SaveTeachplanDto saveTeachplanDto) {
         teachplanService.saveTeachplan(saveTeachplanDto);
+    }
+
+    @ApiOperation("删除课程计划")
+    @ApiImplicitParam(value = "planId", name = "计划Id", required = true, dataType = "Long", paramType = "path")
+    @DeleteMapping("/teachplan/{planId}")
+    public void deleteTeachplan(@PathVariable Long planId) {
+        teachplanService.deleteTeachplan(planId);
     }
 }

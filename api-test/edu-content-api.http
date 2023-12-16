@@ -93,6 +93,8 @@ Content-Type: application/json
   "grade" : 1,
   "pname" : "新章名称 [点击修改]"
 }
-
-### 删除课程计划
+### 删除课程计划(无子章节的大章节 expected：成功并无返回信息）
 DELETE {{content_host}}/content/teachplan/43
+
+### 删除课程计划(有子章节的大章节 expected：失败并报错）
+DELETE {{content_host}}/content/teachplan/264

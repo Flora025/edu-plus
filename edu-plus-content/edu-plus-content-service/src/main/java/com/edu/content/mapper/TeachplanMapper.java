@@ -21,4 +21,11 @@ public interface TeachplanMapper extends BaseMapper<Teachplan> {
      */
     public List<TeachplanDto> selectTreeNodes(Long courseId);
 
+    /**
+     * 查询某章节的所有子章节
+     * @param planId 章节id
+     * @return 所有子章节dto
+     */
+    public List<Teachplan> selectSubNodes(Long planId);
+
 }

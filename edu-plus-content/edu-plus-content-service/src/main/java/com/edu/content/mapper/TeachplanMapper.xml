@@ -103,4 +103,42 @@
     </select>
 
 
+
+    <resultMap id="subNodeResultMap" type="com.edu.content.model.po.Teachplan">
+        <!-- 一级数据映射 -->
+        <id     column="one_id"        property="id" />
+        <result column="one_pname"      property="pname" />
+        <result column="one_parentid"     property="parentid" />
+        <result column="one_grade"  property="grade" />
+        <result column="one_mediaType"   property="mediaType" />
+        <result column="one_stratTime"   property="stratTime" />
+        <result column="one_endTime"   property="endTime" />
+        <result column="one_orderby"   property="orderby" />
+        <result column="one_courseId"   property="courseId" />
+        <result column="one_coursePubId"   property="coursePubId" />
+        <result column="one_is_preview"   property="isPreview" />
+    </resultMap>
+
+    <!--课程计划树型结构查询-->
+    <select id="selectSubNodes" resultMap="subNodeResultMap" parameterType="long" >
+        select
+            one.id             one_id,
+            one.pname          one_pname,
+            one.parentid       one_parentid,
+            one.grade          one_grade,
+            one.media_type     one_mediaType,
+            one.start_time     one_stratTime,
+            one.end_time       one_endTime,
+            one.orderby        one_orderby,
+            one.course_id      one_courseId,
+            one.course_pub_id  one_coursePubId,
+            one.is_preview     one_is_preview
+
+        from teachplan one
+#                  LEFT JOIN teachplan_media m1 on m1.teachplan_id = one.id
+        where one.parentid= #{value}
+        order by one.orderby
+    </select>
+
+
 </mapper>
