@@ -5,16 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.base.exception.EduPlusException;
 import com.edu.base.model.PageParams;
 import com.edu.base.model.PageResult;
-import com.edu.content.mapper.CourseBaseMapper;
-import com.edu.content.mapper.CourseCategoryMapper;
-import com.edu.content.mapper.CourseMarketMapper;
+import com.edu.content.mapper.*;
 import com.edu.content.model.dto.AddCourseDto;
 import com.edu.content.model.dto.CourseBaseInfoDto;
 import com.edu.content.model.dto.EditCourseDto;
 import com.edu.content.model.dto.QueryCourseParamsDto;
-import com.edu.content.model.po.CourseBase;
-import com.edu.content.model.po.CourseCategory;
-import com.edu.content.model.po.CourseMarket;
+import com.edu.content.model.po.*;
 import com.edu.content.service.CourseBaseInfoService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +33,12 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     @Autowired
     CourseCategoryMapper courseCategoryMapper;
+
+    @Autowired
+    TeachplanMapper teachplanMapper;
+
+    @Autowired
+    CourseTeacherMapper courseTeacherMapper;
 
     @Override
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto) {
@@ -242,6 +244,32 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         CourseBaseInfoDto courseBaseInfo = this.getCourseBase(courseId);
 
         return courseBaseInfo;
+    }
+
+    /**
+     * 删除课程
+     * @param courseId 课程id
+     */
+    @Transactional
+    @Override
+    public void deleteCourse(Long courseId) {
+        // validate id
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null) {
+            EduPlusException.cast("课程不存在");
+        }
+
+        courseBaseMapper.deleteById(courseId);
+        courseMarketMapper.deleteById(courseId);
+
+        LambdaQueryWrapper<Teachplan> queryWrapperPlan = new LambdaQueryWrapper<>();
+        queryWrapperPlan.eq(Teachplan::getCourseId, courseId);
+        teachplanMapper.delete(queryWrapperPlan);
+
+        LambdaQueryWrapper<CourseTeacher> queryWrapperTeacher = new LambdaQueryWrapper<>();
+        queryWrapperTeacher.eq(CourseTeacher::getCourseId, courseId);
+        courseTeacherMapper.delete(queryWrapperTeacher);
+
     }
 }
 
