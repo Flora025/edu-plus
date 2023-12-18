@@ -6,25 +6,25 @@ server:
 spring:
   application:
     name: system-api
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://114.132.240.103:3306/xc402_system?serverTimezone=UTC&userUnicode=true&useSSL=false&
-    username: root
-    password: root
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://114.132.240.103:3306/xc402_system?serverTimezone=UTC&userUnicode=true&useSSL=false&
+#    username: root
+#    password: root
   cloud:
     nacos:
       server-addr: localhost:8848
       discovery:
         namespace: dev
         group: edu-plus
-# 日志文件配置路径
-logging:
-  config: classpath:log4j2-dev.xml
+## 日志文件配置路径
+#logging:
+#  config: classpath:log4j2-dev.xml
 
-# swagger 文档配置
-swagger:
-  title: "学成在线系统管理"
-  description: "系统管理接口"
-  base-package: com.edu.system
-  enabled: true
-  version: 1.0.0
+## swagger 文档配置
+#swagger:
+#  title: "学成在线系统管理"
+#  description: "系统管理接口"
+#  base-package: com.edu.system
+#  enabled: true
+#  version: 1.0.0
