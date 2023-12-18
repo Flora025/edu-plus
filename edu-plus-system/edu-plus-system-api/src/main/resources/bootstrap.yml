@@ -17,6 +17,19 @@ spring:
       discovery:
         namespace: dev
         group: edu-plus
+      config:
+        namespace: dev
+        group: edu-plus
+        file-extension: yaml
+        refresh-enabled: true
+        extension-configs:
+          - data-id: system-service-${spring.profiles.active}.yaml
+            group: edu-plus
+            refresh: true
+  profiles:
+    active: dev
+
+
 ## 日志文件配置路径
 #logging:
 #  config: classpath:log4j2-dev.xml
