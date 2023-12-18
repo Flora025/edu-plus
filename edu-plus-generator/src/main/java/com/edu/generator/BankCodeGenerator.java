@@ -53,7 +53,7 @@ public class BankCodeGenerator {
 		// 数据库配置
 		DataSourceConfig dsc = new DataSourceConfig();
 		dsc.setDbType(DbType.MYSQL);
-		dsc.setUrl("jdbc:mysql://localhost:3306/" + SERVICE_NAME
+		dsc.setUrl("jdbc:mysql://114.132.240.103:3306/" + SERVICE_NAME
 				+ "?useUnicode=true&useSSL=false&characterEncoding=utf8");
 		dsc.setDriverName("com.mysql.jdbc.Driver");
 		dsc.setUsername(DATA_SOURCE_USER_NAME);

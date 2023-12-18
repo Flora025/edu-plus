@@ -10,6 +10,17 @@
     <artifactId>edu-plus-content-service</artifactId>
 
     <dependencies>
+        <!--   nacos-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.edu</groupId>
             <artifactId>edu-plus-content-model</artifactId>

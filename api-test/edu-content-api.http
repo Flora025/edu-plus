@@ -127,9 +127,11 @@ Content-Type: application/json
 "createDate": "2023-12-16 16:33:36"
 }
 
-22,1,小张老师,校长,优秀素质,,2023-12-16 16:33:36
 
 
 
 ### 删除教师信息
 DELETE {{content_host}}/content/courseTeacher/course/75/21
+
+### 删除课程
+DELETE {{content_host}}/content/course/87

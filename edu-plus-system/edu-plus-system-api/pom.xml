@@ -12,6 +12,13 @@
     <description>edu-plus-system-api</description>
 
     <dependencies>
+
+        <!--   注册nacos -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.edu</groupId>
             <artifactId>edu-plus-system-model</artifactId>
