@@ -17,6 +17,14 @@ spring:
           group: edu-plus-common
           refresh: true
 
+minio:
+  endpoint: http://114.132.240.103:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucket:
+    files: mediafiles
+    videofiles: video
+
 #profiles默认为dev
   profiles:
     active: dev
