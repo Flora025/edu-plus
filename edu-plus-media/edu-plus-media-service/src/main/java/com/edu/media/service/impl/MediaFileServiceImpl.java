@@ -38,6 +38,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class MediaFileServiceImpl implements MediaFileService {
+    @Autowired
+    MediaFileService currentProxy;
 
     @Autowired
     MinioClient minioClient;
@@ -100,9 +102,8 @@ public class MediaFileServiceImpl implements MediaFileService {
         boolean uploaded = addMediaFilesToMinIO(localFilePath, mimeType, bucketFiles, objectName);
         uploadFileParamsDto.setFileSize(file.length());
 
-        // 将文件存储到数据库
-        MediaFiles mediaFiles = addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucketFiles, objectName);
-
+        // 将文件存储到数据库 使用代理对象
+        MediaFiles mediaFiles = currentProxy.addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucketFiles, objectName);
         // 准备返回数据
         UploadFileResultDto uploadFileResultDto = new UploadFileResultDto();
         BeanUtils.copyProperties(mediaFiles, uploadFileResultDto);
@@ -119,7 +120,9 @@ public class MediaFileServiceImpl implements MediaFileService {
      * @param objectName          实例名
      * @return mediafile实例
      */
-    private MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucket, String objectName) {
+    @Transactional
+    @Override
+    public MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucket, String objectName) {
         // 查询文件
         MediaFiles mediaFiles = mediaFilesMapper.selectById(fileMd5);
         if (mediaFiles == null) {
@@ -155,7 +158,7 @@ public class MediaFileServiceImpl implements MediaFileService {
      * @param objectName
      * @return
      */
-    private boolean addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName) {
+    public boolean addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName) {
         try {
             // init upload实例 并上传
             UploadObjectArgs testbucket = UploadObjectArgs.builder()
