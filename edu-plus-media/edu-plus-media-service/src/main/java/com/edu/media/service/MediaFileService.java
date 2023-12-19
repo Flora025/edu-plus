@@ -2,6 +2,7 @@ package com.edu.media.service;
 
 import com.edu.base.model.PageParams;
 import com.edu.base.model.PageResult;
+import com.edu.base.model.RestResponse;
 import com.edu.media.model.dto.QueryMediaParamsDto;
 import com.edu.media.model.dto.UploadFileParamsDto;
 import com.edu.media.model.dto.UploadFileResultDto;
@@ -31,4 +32,38 @@ public interface MediaFileService {
     public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath);
 
     MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucketFiles, String objectName);
+
+    /**
+     * 检查文件是否存在
+     * @param fileMd5 md5编码
+     * @return true=存在
+     */
+    public RestResponse<Boolean> checkFile(String fileMd5);
+
+    /**
+     * 检查分块是否存在
+     * @param fileMd5 md5编码
+     * @param chunkIndex 分块序号
+     * @return true=存在
+     */
+    public RestResponse<Boolean> checkChunk(String fileMd5, int chunkIndex);
+
+    /**
+     * 上传分块
+     * @param fileMd5
+     * @param chunk
+     * @param localChunkFilePath
+     * @return
+     */
+    public RestResponse uploadChunk(String fileMd5, int chunk, String localChunkFilePath);
+
+    /**
+     * 合并分块
+     * @param companyId 机构id
+     * @param fileMd5 文件md5编码
+     * @param chunkTotal 分块总数
+     * @param uploadFileParamsDto 文件信息dto
+     * @return 合并结果
+     */
+    public RestResponse mergechunks(Long companyId,String fileMd5,int chunkTotal,UploadFileParamsDto uploadFileParamsDto);
 }
