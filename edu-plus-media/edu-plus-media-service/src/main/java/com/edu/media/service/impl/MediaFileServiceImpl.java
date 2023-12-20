@@ -7,10 +7,12 @@ import com.edu.base.model.PageParams;
 import com.edu.base.model.PageResult;
 import com.edu.base.model.RestResponse;
 import com.edu.media.mapper.MediaFilesMapper;
+import com.edu.media.mapper.MediaProcessMapper;
 import com.edu.media.model.dto.QueryMediaParamsDto;
 import com.edu.media.model.dto.UploadFileParamsDto;
 import com.edu.media.model.dto.UploadFileResultDto;
 import com.edu.media.model.po.MediaFiles;
+import com.edu.media.model.po.MediaProcess;
 import com.edu.media.service.MediaFileService;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
@@ -50,6 +52,9 @@ public class MediaFileServiceImpl implements MediaFileService {
 
     @Autowired
     MediaFilesMapper mediaFilesMapper;
+
+    @Autowired
+    MediaProcessMapper mediaProcessMapper;
 
     //普通文件桶
     @Value("${minio.bucket.files}")
@@ -156,9 +161,33 @@ public class MediaFileServiceImpl implements MediaFileService {
             }
             log.debug("保存文件信息到数据库成功,{}", mediaFiles.toString());
         }
+        // 添加到待处理任务表（需要和入库放在同一个事务）
+        addWaitingTask(mediaFiles);
+        log.debug("保存文件信息到数据库成功,{}", mediaFiles.toString());
         return mediaFiles;
     }
 
+    /**
+     * 添加待处理任务
+     * @param mediaFiles 上传的媒资文件
+     */
+    private void addWaitingTask(MediaFiles mediaFiles) {
+        String filename = mediaFiles.getFilename();
+        String extension = filename.substring(filename.lastIndexOf("."));
+        String mimeType = getMimeType(extension);
+
+        // 如果是avi视频 -> 添加到视频待处理表格
+        if (mimeType.equals("video/x-msvideo")) {
+            MediaProcess mediaProcess = new MediaProcess();
+
+            BeanUtils.copyProperties(mediaFiles, mediaProcess);
+            mediaProcess.setStatus("1"); // 未处理
+            mediaProcess.setFailCount(0); // 失败次数默认为0
+            mediaProcess.setUrl(null);;
+
+            mediaProcessMapper.insert(mediaProcess);
+        }
+    }
 
 
     /**
