@@ -8,6 +8,8 @@ import com.edu.media.model.dto.UploadFileParamsDto;
 import com.edu.media.model.dto.UploadFileResultDto;
 import com.edu.media.model.po.MediaFiles;
 
+import java.io.File;
+
 /**
  * @description 媒资文件管理业务类
  * @date 2022/9/10 8:55
@@ -33,6 +35,20 @@ public interface MediaFileService {
 
     MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucketFiles, String objectName);
 
+    /**
+     * 从minio下载文件到本地
+     */
+    public File downloadFileFromMinIO(String bucket, String objectName);
+
+    /**
+     * 上传文件到minio
+     * @param localFilePath
+     * @param mimeType
+     * @param bucket bucket名
+     * @param objectName
+     * @return 返回是否成功
+     */
+    public boolean addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName);
     /**
      * 检查文件是否存在
      * @param fileMd5 md5编码
