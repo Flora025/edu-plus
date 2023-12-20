@@ -169,6 +169,7 @@ public class MediaFileServiceImpl implements MediaFileService {
 
     /**
      * 添加待处理任务
+     *
      * @param mediaFiles 上传的媒资文件
      */
     private void addWaitingTask(MediaFiles mediaFiles) {
@@ -183,7 +184,8 @@ public class MediaFileServiceImpl implements MediaFileService {
             BeanUtils.copyProperties(mediaFiles, mediaProcess);
             mediaProcess.setStatus("1"); // 未处理
             mediaProcess.setFailCount(0); // 失败次数默认为0
-            mediaProcess.setUrl(null);;
+            mediaProcess.setUrl(null);
+            ;
 
             mediaProcessMapper.insert(mediaProcess);
         }
@@ -406,30 +408,32 @@ public class MediaFileServiceImpl implements MediaFileService {
 
         return RestResponse.success(true);
     }
+
     /**
      * 从minio下载文件
-     * @param bucket 桶
+     *
+     * @param bucket     桶
      * @param objectName 对象名称
      * @return 下载后的文件
      */
-    public File downloadFileFromMinIO(String bucket,String objectName){
+    public File downloadFileFromMinIO(String bucket, String objectName) {
         // 临时文件
         File minioFile = null;
         FileOutputStream outputStream = null;
-        try{
+        try {
             InputStream stream = minioClient.getObject(GetObjectArgs.builder()
                     .bucket(bucket)
                     .object(objectName)
                     .build());
             // 创建临时文件
-            minioFile=File.createTempFile("minio", ".merge");
+            minioFile = File.createTempFile("minio", ".merge");
             outputStream = new FileOutputStream(minioFile);
-            IOUtils.copy(stream,outputStream);
+            IOUtils.copy(stream, outputStream);
             return minioFile;
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(outputStream!=null){
+        } finally {
+            if (outputStream != null) {
                 try {
                     outputStream.close();
                 } catch (IOException e) {
@@ -441,16 +445,17 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
 
-    private String getFilePathByMd5(String fileMd5,String fileExt){
-        return   fileMd5.substring(0,1) + "/" + fileMd5.substring(1,2) + "/" + fileMd5 + "/" +fileMd5 +fileExt;
+    private String getFilePathByMd5(String fileMd5, String fileExt) {
+        return fileMd5.substring(0, 1) + "/" + fileMd5.substring(1, 2) + "/" + fileMd5 + "/" + fileMd5 + fileExt;
     }
 
     /**
      * 清除分块文件
+     *
      * @param chunkFileFolderPath 分块文件路径
-     * @param chunkTotal 分块文件总数
+     * @param chunkTotal          分块文件总数
      */
-    private void clearChunkFiles(String chunkFileFolderPath,int chunkTotal){
+    private void clearChunkFiles(String chunkFileFolderPath, int chunkTotal) {
 
         try {
             List<DeleteObject> deleteObjects = Stream.iterate(0, i -> ++i)
@@ -460,18 +465,18 @@ public class MediaFileServiceImpl implements MediaFileService {
 
             RemoveObjectsArgs removeObjectsArgs = RemoveObjectsArgs.builder().bucket("video").objects(deleteObjects).build();
             Iterable<Result<DeleteError>> results = minioClient.removeObjects(removeObjectsArgs);
-            results.forEach(r->{
+            results.forEach(r -> {
                 DeleteError deleteError = null;
                 try {
                     deleteError = r.get();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    log.error("清楚分块文件失败,objectname:{}",deleteError.objectName(),e);
+                    log.error("清楚分块文件失败,objectname:{}", deleteError.objectName(), e);
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("清楚分块文件失败,chunkFileFolderPath:{}",chunkFileFolderPath,e);
+            log.error("清楚分块文件失败,chunkFileFolderPath:{}", chunkFileFolderPath, e);
         }
     }
 
