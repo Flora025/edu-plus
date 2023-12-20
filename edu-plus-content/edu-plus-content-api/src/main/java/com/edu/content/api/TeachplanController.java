@@ -1,5 +1,6 @@
 package com.edu.content.api;
 
+import com.edu.content.model.dto.BindTeachplanMediaDto;
 import com.edu.content.model.dto.SaveTeachplanDto;
 import com.edu.content.model.dto.TeachplanDto;
 import com.edu.content.service.TeachplanService;
@@ -46,6 +47,12 @@ public class TeachplanController {
     @PostMapping("/teachplan/{direction}/{planId}")
     public void moveTeachplan(@PathVariable String direction, @PathVariable Long planId) {
         teachplanService.moveTeachplan(direction, planId);
+    }
+
+    @ApiOperation(value = "课程计划和媒资信息绑定")
+    @PostMapping("/teachplan/association/media")
+    public void associationMedia(@RequestBody BindTeachplanMediaDto bindTeachplanMediaDto) {
+
     }
 
 }
