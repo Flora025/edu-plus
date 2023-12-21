@@ -1,5 +1,8 @@
 package com.edu.content.api;
 
+import com.edu.content.model.dto.CoursePreviewDto;
+import com.edu.content.service.CoursePublishService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,12 +10,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CoursePublishController {
+    @Autowired
+    CoursePublishService coursePublishService;
+
     @GetMapping("/coursepreview/{courseId}")
     public ModelAndView preview(@PathVariable("courseId") Long courseId){
         ModelAndView modelAndView = new ModelAndView();
-
+        CoursePreviewDto coursePreviewInfo = coursePublishService.getCoursePreviewInfo(courseId);
         //设置模型数据
-//        modelAndView.addObject("name","小明");
+        modelAndView.addObject("model", coursePreviewInfo);
 
         //设置模板名称
         modelAndView.setViewName("course_template"); // 会自动拼接后缀
