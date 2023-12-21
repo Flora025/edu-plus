@@ -211,4 +211,25 @@ public class TeachplanServiceImpl implements TeachplanService {
         return teachplanMedia;
 
     }
+
+    @Transactional
+    @Override
+    public void unbindMedia(long teachPlanId, long mediaId) {
+        // validate id
+        // 教学计划id
+        Teachplan teachplan = teachplanMapper.selectById(teachPlanId);
+        if (teachplan == null) {
+            EduPlusException.cast("教学计划不存在");
+        }
+
+        // 删除绑定条目
+        LambdaQueryWrapper<TeachplanMedia> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TeachplanMedia::getTeachplanId, teachPlanId); // 指定teach plan
+        queryWrapper.eq(TeachplanMedia::getMediaId, mediaId); // 指定media id
+
+        int delete = teachplanMediaMapper.delete(queryWrapper);
+        if (delete <= 0) {
+            EduPlusException.cast("解绑失败");
+        }
+    }
 }

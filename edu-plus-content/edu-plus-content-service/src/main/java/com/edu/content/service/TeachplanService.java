@@ -40,4 +40,11 @@ public interface TeachplanService {
      * @return
      */
     public TeachplanMedia associationMedia(BindTeachplanMediaDto bindTeachplanMediaDto);
+
+    /**
+     * 解除绑定教学计划和媒体资源信息
+     * @param teachPlanId 教学计划id
+     * @param mediaId 媒资id
+     */
+    void unbindMedia(long teachPlanId, long mediaId);
 }

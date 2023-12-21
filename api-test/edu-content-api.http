@@ -146,3 +146,7 @@ Content-Type: application/json
   "fileName": "",
   "teachplanId": ""
 }
+
+
+### 课程计划接触视频绑定
+DELETE {{media_host}}/media/teachplan/association/media/{teachPlanId}/{mediaId}
