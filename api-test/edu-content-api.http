@@ -135,3 +135,14 @@ DELETE {{content_host}}/content/courseTeacher/course/75/21
 
 ### 删除课程
 DELETE {{content_host}}/content/course/87
+
+
+### 课程计划绑定视频
+POST {{media_host}}/media/teachplan/association/media
+Content-Type: application/json
+
+{
+  "mediaId": "",
+  "fileName": "",
+  "teachplanId": ""
+}

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edu.base.exception.EduPlusException;
 import com.edu.content.mapper.TeachplanMapper;
 import com.edu.content.mapper.TeachplanMediaMapper;
+import com.edu.content.model.dto.BindTeachplanMediaDto;
 import com.edu.content.model.dto.SaveTeachplanDto;
 import com.edu.content.model.dto.TeachplanDto;
 import com.edu.content.model.po.Teachplan;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -54,6 +56,7 @@ public class TeachplanServiceImpl implements TeachplanService {
 
     /**
      * 计算同级别计划的count
+     *
      * @param courseId 课程id
      * @param parentId 父层级id
      * @return 当前最大序号
@@ -69,6 +72,7 @@ public class TeachplanServiceImpl implements TeachplanService {
 
     /**
      * 获取指定parent下同级别所有plan
+     *
      * @param courseId
      * @param parentId
      * @return list of plans
@@ -86,6 +90,7 @@ public class TeachplanServiceImpl implements TeachplanService {
      * 删除指定id的章节
      * 对于大章节，只有在无小章节时可删除
      * 对于小章节，会将teachplan_media表关联的信息也删除
+     *
      * @param planId plan id
      */
     @Transactional
@@ -126,8 +131,9 @@ public class TeachplanServiceImpl implements TeachplanService {
 
     /**
      * 移动课程计划章节
+     *
      * @param direction 移动方向
-     * @param planId 计划id
+     * @param planId    计划id
      */
     @Transactional
     @Override
@@ -168,5 +174,41 @@ public class TeachplanServiceImpl implements TeachplanService {
         if (curUpdate <= 0) {
             EduPlusException.cast("移动失败");
         }
+    }
+
+    @Transactional
+    @Override
+    public TeachplanMedia associationMedia(BindTeachplanMediaDto bindTeachplanMediaDto) {
+        // 1. validation
+        // 教学计划id
+        Long teachplanId = bindTeachplanMediaDto.getTeachplanId();
+        Teachplan teachplan = teachplanMapper.selectById(teachplanId);
+        if (teachplan == null) {
+            EduPlusException.cast("教学计划不存在");
+        }
+        Integer grade = teachplan.getGrade();
+        if (grade != 2) {
+            EduPlusException.cast("只允许第二级教学计划绑定媒资文件");
+        }
+
+        // 获得课程id
+        Long courseId = teachplan.getCourseId();
+
+        // 2. delete if there exists bound media
+        // 先删除原来该教学计划绑定的媒资
+        teachplanMediaMapper.delete(new LambdaQueryWrapper<TeachplanMedia>().eq(TeachplanMedia::getTeachplanId, teachplanId));
+
+        // 3. bind media
+        // 再添加教学计划与媒资的绑定关系
+        TeachplanMedia teachplanMedia = new TeachplanMedia();
+        teachplanMedia.setCourseId(courseId);
+        teachplanMedia.setTeachplanId(teachplanId);
+        teachplanMedia.setMediaFilename(bindTeachplanMediaDto.getFileName()); // 名字不一样 单独设置一下
+        teachplanMedia.setMediaId(bindTeachplanMediaDto.getMediaId());
+        teachplanMedia.setCreateDate(LocalDateTime.now());
+        teachplanMediaMapper.insert(teachplanMedia);
+
+        return teachplanMedia;
+
     }
 }
