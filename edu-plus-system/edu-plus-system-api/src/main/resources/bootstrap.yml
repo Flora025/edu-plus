@@ -8,7 +8,7 @@ spring:
     name: system-api
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://114.132.240.103:3306/xc402_system?serverTimezone=UTC&userUnicode=true&useSSL=false&
+#    url: jdbc:mysql://localhost:3306/xc402_system?serverTimezone=UTC&userUnicode=true&useSSL=false&
 #    username: root
 #    password: root
   cloud:

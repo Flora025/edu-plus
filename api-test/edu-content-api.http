@@ -12,7 +12,7 @@ Content-Type: application/json
 GET {{gateway_host}}/content/course-category/tree-nodes
 
 ### 新增课程基本信息
-POST {{content_host}}/content/course
+POST {{gateway_host}}/content/course
 Content-Type: application/json
 
 {
