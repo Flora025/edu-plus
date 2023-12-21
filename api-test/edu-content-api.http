@@ -81,7 +81,7 @@ Content-Type: application/json
 }
 
 ### 查询某个课程的课程计划
-GET {{content_host}}/content/teachplan/117/tree-nodes
+GET {{gateway_host}}/content/teachplan/117/tree-nodes
 
 ### 新增课程计划--章
 POST {{content_host}}/content/teachplan
@@ -138,7 +138,7 @@ DELETE {{content_host}}/content/course/87
 
 
 ### 课程计划绑定视频
-POST {{media_host}}/media/teachplan/association/media
+POST {{content_host}}/content/teachplan/association/media
 Content-Type: application/json
 
 {
@@ -149,4 +149,4 @@ Content-Type: application/json
 
 
 ### 课程计划接触视频绑定
-DELETE {{media_host}}/media/teachplan/association/media/{teachPlanId}/{mediaId}
+DELETE  {{content_host}}/content/teachplan/association/media/123/345
