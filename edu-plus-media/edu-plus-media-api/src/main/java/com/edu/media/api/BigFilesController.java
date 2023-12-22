@@ -36,7 +36,7 @@ public class BigFilesController {
 
     // 上传前：检测分块文件
     @ApiOperation(value = "检测分块文件")
-    @PostMapping("/upload/chechchunk")
+    @PostMapping("/upload/checkchunk")
     public RestResponse<Boolean> checkchunk(@RequestParam("fileMd5") String fileMd5,
                                             @RequestParam("chunk") int chunk) throws Exception {
         return mediaFileService.checkChunk(fileMd5, chunk);

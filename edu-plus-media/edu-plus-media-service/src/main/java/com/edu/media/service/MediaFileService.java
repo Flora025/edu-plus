@@ -21,7 +21,7 @@ public interface MediaFileService {
      * @param queryMediaParamsDto 查询条件
      * @description 媒资文件查询方法
      */
-    public PageResult<MediaFiles> queryMediaFiels(Long companyId, PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto);
+    public PageResult<MediaFiles> queryMediaFiles(Long companyId, PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto);
 
     /**
      * 上传文件
