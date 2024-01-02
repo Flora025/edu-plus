@@ -38,6 +38,10 @@ spring:
           - data-id: freemarker-config-${spring.profiles.active}.yaml
             group: edu-plus-common
             refresh: true
+          - data-id: feign-${spring.profiles.active}.yaml
+            group: edu-plus-common
+            refresh: true
+
   profiles:
     active: dev #环境名
 

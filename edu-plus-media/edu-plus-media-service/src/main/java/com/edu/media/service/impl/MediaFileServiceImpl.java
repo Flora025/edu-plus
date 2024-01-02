@@ -91,7 +91,7 @@ public class MediaFileServiceImpl implements MediaFileService {
 
     @Transactional
     @Override
-    public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath) {
+    public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath, String objectName) {
         File file = new File(localFilePath);
         if (!file.exists()) {
             EduPlusException.cast("文件不存在");
@@ -113,7 +113,9 @@ public class MediaFileServiceImpl implements MediaFileService {
         String defaultFolderPath = getDefaultFolderPath();
 
         // 存储到minio中的对象名
-        String objectName = defaultFolderPath + fileMd5 + extension;
+        if (StringUtils.isEmpty(objectName)) {
+            objectName =  defaultFolderPath + fileMd5 + extension;
+        }
 
         // 将文件上传到minio
         boolean uploaded = addMediaFilesToMinIO(localFilePath, mimeType, bucketFiles, objectName);
