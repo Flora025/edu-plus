@@ -10,6 +10,11 @@
     <artifactId>edu-plus-content-service</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
         <!-- feign  -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
