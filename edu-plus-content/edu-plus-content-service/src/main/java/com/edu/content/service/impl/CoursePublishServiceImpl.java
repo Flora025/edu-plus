@@ -1,19 +1,24 @@
 package com.edu.content.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.edu.base.exception.CommonError;
 import com.edu.base.exception.EduPlusException;
 import com.edu.content.mapper.CourseBaseMapper;
 import com.edu.content.mapper.CourseMarketMapper;
+import com.edu.content.mapper.CoursePublishMapper;
 import com.edu.content.mapper.CoursePublishPreMapper;
 import com.edu.content.model.dto.CourseBaseInfoDto;
 import com.edu.content.model.dto.CoursePreviewDto;
 import com.edu.content.model.dto.TeachplanDto;
 import com.edu.content.model.po.CourseBase;
 import com.edu.content.model.po.CourseMarket;
+import com.edu.content.model.po.CoursePublish;
 import com.edu.content.model.po.CoursePublishPre;
 import com.edu.content.service.CourseBaseInfoService;
 import com.edu.content.service.CoursePublishService;
 import com.edu.content.service.TeachplanService;
+import com.edu.messagesdk.model.po.MqMessage;
+import com.edu.messagesdk.service.MqMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +46,12 @@ public class CoursePublishServiceImpl implements CoursePublishService {
 
     @Autowired
     CourseBaseMapper courseBaseMapper;
+
+    @Autowired
+    CoursePublishMapper coursePublishMapper;
+
+    @Autowired
+    MqMessageService mqMessageService;
 
     @Override
     public CoursePreviewDto getCoursePreviewInfo(Long courseId) {
@@ -120,4 +131,47 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         courseBase.setAuditStatus("202003");
         courseBaseMapper.updateById(courseBase);
     }
+
+    @Override
+    public void publish(Long companyId, Long courseId) {
+        // 查询prepub表
+        CoursePublishPre coursePublishPre = coursePublishPreMapper.selectById(courseId);
+        if (coursePublishPre == null) {
+            EduPlusException.cast("课程无审核记录");
+        }
+
+
+        // validation
+        String status = coursePublishPre.getStatus();
+        if (!status.equals("202004")) {
+            EduPlusException.cast("课程未审核通过");
+        }
+
+        // 向课程pub表写入相关数据
+        CoursePublish coursePublish = new CoursePublish();
+        BeanUtils.copyProperties(coursePublishPre, coursePublish);
+
+        CoursePublish coursePublishObj = coursePublishMapper.selectById(courseId);
+        if (coursePublishObj == null) {
+            // insert
+            coursePublishMapper.insert(coursePublish);
+        } else {
+            // update
+            coursePublishMapper.updateById(coursePublish);
+        }
+        // 向消息表写入数据 TODO
+        saveCoursePublishMessage(courseId);
+
+        // 将prepub表数据删除
+        coursePublishPreMapper.deleteById(courseId);
+    }
+
+    private void saveCoursePublishMessage(Long courseId){
+        MqMessage mqMessage = mqMessageService.addMessage("course_publish", String.valueOf(courseId), null, null);
+        if (mqMessage == null) {
+            EduPlusException.cast(CommonError.UNKNOWN_ERROR);
+        }
+    }
+
+
 }

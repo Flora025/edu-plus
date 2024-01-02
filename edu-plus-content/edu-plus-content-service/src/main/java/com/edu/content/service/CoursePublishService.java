@@ -19,4 +19,9 @@ public interface CoursePublishService {
      * @param courseId 课程id
      */
     void commitAudit(Long companyId, Long courseId);
+
+    /**
+     * 课程发布
+     */
+    void publish(Long companyId, Long courseId);
 }
