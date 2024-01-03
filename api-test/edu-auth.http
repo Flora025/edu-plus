@@ -13,3 +13,10 @@ POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&gr
 
 ### 校验jwt令牌 ok
 POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZWR1LXBsdXMiXSwidXNlcl9uYW1lIjoiemhhbmdzYW4iLCJzY29wZSI6WyJhbGwiXSwiZXhwIjoxNzA0MzA2Njk5LCJhdXRob3JpdGllcyI6WyJwMSJdLCJqdGkiOiJjMTY4NmFmMS1mOTg1LTQwNDYtOTgyOC1kMTY5NDdjZDZhZDYiLCJjbGllbnRfaWQiOiJYY1dlYkFwcCJ9.5s2dRJJ40U2-3lvlzW1JK4bk2CrigumDIP3CKF-jtF0
+
+### 查询课程信息
+GET http://localhost:63040/content/course/2
+
+### 携带token访问资源服务
+GET http://localhost:63040/content/course/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE3MDQzMDc0NjQsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjVmYTkyNDlmLWZhYmEtNGU4ZS1iZTViLTE1OTljNjIxYjI1ZCIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.TiWlz7zdOlF1M3dTpW_SffbdBuoP0dfVwjss6-sv0BM
