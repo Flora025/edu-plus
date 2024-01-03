@@ -9,10 +9,10 @@ import com.edu.content.model.dto.EditCourseDto;
 import com.edu.content.model.dto.QueryCourseParamsDto;
 import com.edu.content.model.po.CourseBase;
 import com.edu.content.service.CourseBaseInfoService;
+import com.edu.content.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,9 +42,9 @@ public class CourseBaseInfoController {
     @GetMapping("/course/{courseId}")
     public CourseBaseInfoDto getCourseBase(@PathVariable Long courseId) {
         // 取出当前用户身份
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        System.out.println(principal);
-
+        SecurityUtil.XcUser user = SecurityUtil.getUser(); // 获得除密码外的所有信息
         return courseBaseInfoService.getCourseBase(courseId);
     }
 
