@@ -1,5 +1,6 @@
 package com.edu.ucenter.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edu.ucenter.mapper.XcUserMapper;
 import com.edu.ucenter.model.po.XcUser;
@@ -17,24 +18,29 @@ public class UserServiceImpl implements UserDetailsService {
     XcUserMapper xcUserMapper;
 
     /**
-     * @description 根据账号查询用户信息
-     * @param s  账号
+     * @param s 账号
      * @return org.springframework.security.core.userdetails.UserDetails
+     * @description 根据账号查询用户信息
      */
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
         XcUser user = xcUserMapper.selectOne(new LambdaQueryWrapper<XcUser>().eq(XcUser::getUsername, s));
-        if(user==null){
-            //返回空表示用户不存在
+        if (user == null) {
+            // 返回空表示用户不存在
             return null;
         }
-        //取出数据库存储的正确密码
-        String password  =user.getPassword();
-        //用户权限,如果不加报Cannot pass a null GrantedAuthority collection
-        String[] authorities= {"test"};
+        // 取出数据库存储的正确密码
+        String password = user.getPassword();
+        // 用户权限,如果不加报Cannot pass a null GrantedAuthority collection
+        String[] authorities = {"test"};
+
+        // 为了安全在令牌中不放密码
+        user.setPassword(null);
+        // 用户信息转json
+        String userString = JSON.toJSONString(user);
         //创建UserDetails对象,权限信息待实现授权功能时再向UserDetail中加入
-        UserDetails userDetails = User.withUsername(user.getUsername()).password(password).authorities(authorities).build();
+        UserDetails userDetails = User.withUsername(userString).password(password).authorities(authorities).build();
 
         return userDetails;
     }
