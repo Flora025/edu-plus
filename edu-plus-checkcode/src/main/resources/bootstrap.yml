@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: checkcode
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      discovery:
+        namespace: dev
+        group: edu-plus
+      config:
+        namespace: dev
+        group: edu-plus
+        file-extension: yaml
+        refresh-enabled: true
+        shared-configs:
+          - data-id: swagger-${spring.profiles.active}.yaml
+            group: edu-plus-common
+            refresh: true
+          - data-id: logging-${spring.profiles.active}.yaml
+            group: edu-plus-common
+            refresh: true
+          - data-id: redis-${spring.profiles.active}.yaml
+            group: edu-plus-common
+            refresh: true
+
+  profiles:
+    active: dev
