@@ -1,9 +1,15 @@
 GET http://localhost:63070/auth//oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=authorization_code&code=naLZjO&redirect_uri=http://localhost:8601
 
-### 授权码模式
+### 授权码模式 ok
 ### 第一步申请授权码(浏览器请求)/oauth/authorize?client_id=c1&response_type=code&scope=all&redirect_uri=http://www.51xuecheng.cn
 ### 第二步申请令牌
 POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=authorization_code&code=naLZjO&redirect_uri=http://localhost:8601
 
-### 密码模式
+### 密码模式 ok
 POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
+
+### 密码模式 JWT ok
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
+
+### 校验jwt令牌 ok
+POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZWR1LXBsdXMiXSwidXNlcl9uYW1lIjoiemhhbmdzYW4iLCJzY29wZSI6WyJhbGwiXSwiZXhwIjoxNzA0MzA2Njk5LCJhdXRob3JpdGllcyI6WyJwMSJdLCJqdGkiOiJjMTY4NmFmMS1mOTg1LTQwNDYtOTgyOC1kMTY5NDdjZDZhZDYiLCJjbGllbnRfaWQiOiJYY1dlYkFwcCJ9.5s2dRJJ40U2-3lvlzW1JK4bk2CrigumDIP3CKF-jtF0
