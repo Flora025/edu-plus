@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Api(value = "Course info interface",tags = "Course info interface")
+@Api(value = "Course info interface", tags = "Course info interface")
 @RestController // 返回一个对象而不是视图
 public class CourseBaseInfoController {
 
@@ -25,16 +25,16 @@ public class CourseBaseInfoController {
 
     @ApiOperation("Course info query")
     @PostMapping("/course/list")
-    public PageResult<CourseBase> list(PageParams pageParams, @RequestBody QueryCourseParamsDto queryCourseParams){
+    public PageResult<CourseBase> list(PageParams pageParams, @RequestBody QueryCourseParamsDto queryCourseParams) {
         PageResult<CourseBase> pageResult = courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParams);
         return pageResult;
     }
 
     @ApiOperation("新增课程基础信息")
     @PostMapping("/course")
-    public CourseBaseInfoDto createCourseBase(@RequestBody @Validated  AddCourseDto addCourseDto) {
+    public CourseBaseInfoDto createCourseBase(@RequestBody @Validated AddCourseDto addCourseDto) {
         // TODO: 暂时hardcode
-         Long companyId = 1232141425L;
+        Long companyId = 1232141425L;
         return courseBaseInfoService.createCourseBase(companyId, addCourseDto);
     }
 
@@ -50,7 +50,7 @@ public class CourseBaseInfoController {
 
     @ApiOperation("修改课程基础信息")
     @PutMapping("/course")
-    public CourseBaseInfoDto modifyCourseBase(@RequestBody @Validated EditCourseDto editCourseDto){
+    public CourseBaseInfoDto modifyCourseBase(@RequestBody @Validated EditCourseDto editCourseDto) {
         // TODO: 暂时hardcode
         Long companyId = 1232141425L;
         return courseBaseInfoService.editCourseBase(companyId, editCourseDto);
