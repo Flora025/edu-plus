@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserDetailsService {
         // 根据认证方式使用不同的认证bean
         String authType = authParamsDto.getAuthType();
         AuthService authService = applicationContext.getBean(authType + "_authservice", AuthService.class);
-        XcUserExt user = authService.execute(authParamsDto);
+        XcUserExt user = authService.execute(authParamsDto); // 使用对应bean的execute方法 获取user info
 
         return getUserPrincipal(user);
     }
