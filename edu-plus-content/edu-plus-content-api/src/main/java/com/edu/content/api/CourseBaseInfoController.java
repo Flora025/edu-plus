@@ -28,7 +28,12 @@ public class CourseBaseInfoController {
     @PreAuthorize("hasAuthority('权限标识符')") // 权限控制
     @PostMapping("/course/list")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody QueryCourseParamsDto queryCourseParams) {
-        PageResult<CourseBase> pageResult = courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParams);
+        // 取出用户身份
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        // 机构id
+        String companyId = user.getCompanyId();
+
+        PageResult<CourseBase> pageResult = courseBaseInfoService.queryCourseBaseList(Long.parseLong(companyId), pageParams, queryCourseParams);
         return pageResult;
     }
 

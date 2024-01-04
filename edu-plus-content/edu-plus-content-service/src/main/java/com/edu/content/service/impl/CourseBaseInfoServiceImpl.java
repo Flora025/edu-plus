@@ -41,7 +41,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     CourseTeacherMapper courseTeacherMapper;
 
     @Override
-    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto) {
+    public PageResult<CourseBase> queryCourseBaseList(Long companyId, PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto) {
 
         // 1. create query wrapper (query by every param)
         LambdaQueryWrapper<CourseBase> queryWrapper = new LambdaQueryWrapper<>();
@@ -60,6 +60,10 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
                 StringUtils.isNotEmpty(queryCourseParamsDto.getPublishStatus()),
                 CourseBase::getStatus,
                 queryCourseParamsDto.getPublishStatus());
+        // 4) query by company id
+        // 机构id
+        queryWrapper.eq(CourseBase::getCompanyId, companyId);
+
 
         // 2. create page object
         Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
@@ -145,9 +149,9 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     }
 
 
-
     /**
      * 保存课程营销信息
+     *
      * @param courseMarket
      * @return 保存结果
      */
@@ -181,6 +185,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     /**
      * 查询课程信息
+     *
      * @param courseId 课程id
      * @return 课程info dto（包括base info和market info）
      */
@@ -197,9 +202,9 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
         // copy baseInfo and marketInfo into dto
         CourseBaseInfoDto courseBaseInfoDto = new CourseBaseInfoDto();
-        BeanUtils.copyProperties(courseBase,courseBaseInfoDto);
-        if(courseMarket != null){
-            BeanUtils.copyProperties(courseMarket,courseBaseInfoDto);
+        BeanUtils.copyProperties(courseBase, courseBaseInfoDto);
+        if (courseMarket != null) {
+            BeanUtils.copyProperties(courseMarket, courseBaseInfoDto);
         }
 
         // base&market里没有mtname和stname -> 需要去course category里查询
@@ -248,6 +253,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     /**
      * 删除课程
+     *
      * @param courseId 课程id
      */
     @Transactional
