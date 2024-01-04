@@ -16,7 +16,7 @@ public class FeignClientTest {
     // 测试feign client远程调用content接口
     @Test
     public void testContentServiceClient() {
-        CoursePublish coursepublish = contentServiceClient.getCoursepublish(18L);
+        CoursePublish coursepublish = contentServiceClient.getCoursepublish(120L);
         Assertions.assertNotNull(coursepublish);
     }
 }
