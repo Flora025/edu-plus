@@ -150,3 +150,7 @@ Content-Type: application/json
 
 ### 课程计划接触视频绑定
 DELETE  {{content_host}}/content/teachplan/association/media/123/345
+
+
+### 查询课程发布信息
+GET {{content_host}}/content/r/coursepublish/2
