@@ -45,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Value("${pay.alipay.APP_ID}")
     String APP_ID;
+
     @Value("${pay.alipay.APP_PRIVATE_KEY}")
     String APP_PRIVATE_KEY;
 

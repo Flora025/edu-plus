@@ -6,10 +6,10 @@ spring:
       server-addr: 192.168.101.65:8848
       discovery:
         namespace: ${spring.profiles.active}
-        group: edu-plus-project
+        group: edu-plus
       config:
         namespace: ${spring.profiles.active}
-        group: edu-plus-project
+        group: edu-plus
         file-extension: yaml
         refresh-enabled: true
         shared-configs:

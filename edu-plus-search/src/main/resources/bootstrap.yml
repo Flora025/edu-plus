@@ -6,10 +6,10 @@ spring:
       server-addr: localhost:8848
       discovery:
         namespace: dev
-        group: edu-plus-project
+        group: edu-plus
       config:
         namespace: dev
-        group: edu-plus-project
+        group: edu-plus
         file-extension: yaml
         refresh-enabled: true
         shared-configs:

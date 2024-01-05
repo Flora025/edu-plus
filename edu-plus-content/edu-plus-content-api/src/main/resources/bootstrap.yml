@@ -42,6 +42,8 @@ spring:
             group: edu-plus-common
             refresh: true
 
+
+
   profiles:
     active: dev #环境名
 
