@@ -1,12 +1,13 @@
 package com.edu.orders.util;
 
-import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import static com.alibaba.fastjson.JSON.parseObject;
 
 /***
  * 获取当前登录用户信息，使用解析jwt中的用户信息
@@ -21,7 +22,7 @@ public class SecurityUtil {
                 //取出用户身份信息
                 String principal = principalObj.toString();
                 //将json转成对象
-                XcUser user = JSON.parseObject(principal, XcUser.class);
+                XcUser user = parseObject(principal, XcUser.class);
                 return user;
             }
         } catch (Exception e) {
