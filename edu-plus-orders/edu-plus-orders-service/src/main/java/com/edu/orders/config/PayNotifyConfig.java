@@ -1,4 +1,4 @@
-package com.edu.learning.config;
+package com.edu.orders.config;
 
 import com.alibaba.fastjson.JSON;
 import com.edu.messagesdk.model.po.MqMessage;
