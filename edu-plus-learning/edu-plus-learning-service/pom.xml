@@ -10,11 +10,11 @@
     <artifactId>edu-plus-learning-service</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.edu</groupId>
-            <artifactId>edu-plus-base</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.edu</groupId>-->
+<!--            <artifactId>edu-plus-base</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

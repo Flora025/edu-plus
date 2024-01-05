@@ -10,11 +10,6 @@
     <artifactId>edu-plus-learning-api</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.edu</groupId>
-            <artifactId>edu-plus-base</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -41,6 +36,11 @@
         <dependency>
             <groupId>com.edu</groupId>
             <artifactId>edu-plus-learning-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.edu</groupId>
+            <artifactId>edu-plus-base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!--cloud的基础环境包-->
