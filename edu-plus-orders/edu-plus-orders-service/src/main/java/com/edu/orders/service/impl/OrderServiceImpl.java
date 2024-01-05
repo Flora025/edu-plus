@@ -172,23 +172,24 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void saveAliPayStatus(PayStatusDto payStatusDto) {
-        //支付流水号
+        // 得到支付流水号
         String payNo = payStatusDto.getOut_trade_no();
         XcPayRecord payRecord = getPayRecordByPayno(payNo);
         if (payRecord == null) {
-            EduPlusException.cast("支付记录找不到");
+            EduPlusException.cast("无法获得支付记录");
         }
-        //支付结果
+
+        // 得到支付结果
         String trade_status = payStatusDto.getTrade_status();
         log.debug("收到支付结果:{},支付记录:{}}", payStatusDto.toString(), payRecord.toString());
         if (trade_status.equals("TRADE_SUCCESS")) {
 
-            //支付金额变为分
+            // 支付金额变为分
             Float totalPrice = payRecord.getTotalPrice() * 100;
             Float total_amount = Float.parseFloat(payStatusDto.getTotal_amount()) * 100;
-            //校验是否一致
+            // 校验是否一致
             if (!payStatusDto.getApp_id().equals(APP_ID) || totalPrice.intValue() != total_amount.intValue()) {
-                //校验失败
+                // 校验失败
                 log.info("校验支付结果失败,支付记录:{},APP_ID:{},totalPrice:{}", payRecord.toString(), payStatusDto.getApp_id(), total_amount.intValue());
                 EduPlusException.cast("校验支付结果失败");
             }
@@ -198,6 +199,8 @@ public class OrderServiceImpl implements OrderService {
             payRecord_u.setOutPayChannel("Alipay");
             payRecord_u.setOutPayNo(payStatusDto.getTrade_no());//支付宝交易号
             payRecord_u.setPaySuccessTime(LocalDateTime.now());//通知时间
+
+            // ！更新状态到支付记录表
             int update1 = payRecordMapper.update(payRecord_u, new LambdaQueryWrapper<XcPayRecord>().eq(XcPayRecord::getPayNo, payNo));
             if (update1 > 0) {
                 log.info("更新支付记录状态成功:{}", payRecord_u.toString());
@@ -205,7 +208,8 @@ public class OrderServiceImpl implements OrderService {
                 log.info("更新支付记录状态失败:{}", payRecord_u.toString());
                 EduPlusException.cast("更新支付记录状态失败");
             }
-            //关联的订单号
+
+            // 获取关联的订单号
             Long orderId = payRecord.getOrderId();
             XcOrders orders = ordersMapper.selectById(orderId);
             if (orders == null) {
@@ -214,6 +218,8 @@ public class OrderServiceImpl implements OrderService {
             }
             XcOrders order_u = new XcOrders();
             order_u.setStatus("600002");//支付成功
+
+            // ！更新状态到订单表
             int update = ordersMapper.update(order_u, new LambdaQueryWrapper<XcOrders>().eq(XcOrders::getId, orderId));
             if (update > 0) {
                 log.info("更新订单表状态成功,订单号:{}", orderId);
