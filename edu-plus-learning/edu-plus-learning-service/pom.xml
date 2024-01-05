@@ -10,7 +10,7 @@
     <artifactId>edu-plus-learning-service</artifactId>
 
     <dependencies>
-<!--        <dependency>-->
+        <!--        <dependency>-->
 <!--            <groupId>com.edu</groupId>-->
 <!--            <artifactId>edu-plus-base</artifactId>-->
 <!--            <version>0.0.1-SNAPSHOT</version>-->

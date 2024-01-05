@@ -215,5 +215,30 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
 
     }
 
+    @Override
+    public boolean saveChooseCourseStauts(String choosecourseId) {
+        // 更具选课id查询选课表
+        XcChooseCourse chooseCourse = xcChooseCourseMapper.selectById(choosecourseId);
+        if (chooseCourse == null) {
+            log.debug("接受购买课程消息，根据选课id无法找到对应选课记录");
+            return false;
+        }
+        String status = chooseCourse.getStatus();
+        if ("701002".equals(status)) {
+            // 更新选课记录状态为支付成功
+            chooseCourse.setStatus("701001");
+            int i = xcChooseCourseMapper.updateById(chooseCourse);
+            if (i <= 0) {
+                log.debug("添加选课记录失败：{}", chooseCourse);
+                EduPlusException.cast("添加选课记录失败");
+            }
+
+            // 向我的课表插入记录
+            XcCourseTables xcCourseTables = addCourseTabls(chooseCourse);
+        }
+
+        return true;
+    }
+
 
 }
