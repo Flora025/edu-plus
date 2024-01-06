@@ -27,7 +27,7 @@ public class MyLearningController {
     public RestResponse<String> getvideo(@PathVariable("courseId") Long courseId, @PathVariable("courseId") Long teachplanId, @PathVariable("mediaId") String mediaId) {
 
         //get userid
-        SecurityUtil.XcUser user = SecurityUtil.getUser(); // 获取当前线程绑定的用户
+        SecurityUtil.XcUser user = SecurityUtil.getUser(); //获取当前线程绑定的用户
         String userId = null;
         if (user != null) {
             userId = user.getId();

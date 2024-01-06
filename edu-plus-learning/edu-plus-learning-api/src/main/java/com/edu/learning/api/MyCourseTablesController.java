@@ -61,7 +61,15 @@ public class MyCourseTablesController {
     @ApiOperation("我的课程表")
     @GetMapping("/mycoursetable")
     public PageResult<XcCourseTables> mycoursetable(MyCourseTableParams params) {
-        return null;
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        if (user == null) {
+            EduPlusException.cast("请登陆后查看课程表");
+        }
+
+        String userId = user.getId();
+        params.setUserId(userId); // userid必须是从controller穿进去;
+        
+        return myCourseTablesService.getMycoursetables(params);
     }
 
 }

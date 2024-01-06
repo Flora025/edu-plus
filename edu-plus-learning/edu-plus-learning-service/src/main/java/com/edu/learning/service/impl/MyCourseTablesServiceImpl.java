@@ -1,11 +1,14 @@
 package com.edu.learning.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.base.exception.EduPlusException;
+import com.edu.base.model.PageResult;
 import com.edu.content.model.po.CoursePublish;
 import com.edu.learning.feignclient.ContentServiceClient;
 import com.edu.learning.mapper.XcChooseCourseMapper;
 import com.edu.learning.mapper.XcCourseTablesMapper;
+import com.edu.learning.model.dto.MyCourseTableParams;
 import com.edu.learning.model.dto.XcChooseCourseDto;
 import com.edu.learning.model.dto.XcCourseTablesDto;
 import com.edu.learning.model.po.XcChooseCourse;
@@ -57,7 +60,7 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
         // 判断学生的学习资格
         // 注意这里要新建一个choose course dto用来返回
         XcChooseCourseDto xcChooseCourseDto = new XcChooseCourseDto();
-        BeanUtils.copyProperties(chooseCourse,xcChooseCourseDto);
+        BeanUtils.copyProperties(chooseCourse, xcChooseCourseDto);
 
         XcCourseTablesDto xcCourseTablesDto = getLearningStatus(userId, courseId);
         xcChooseCourseDto.setLearnStatus(xcCourseTablesDto.getLearnStatus());
@@ -140,6 +143,7 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
 
     /**
      * 添加到我的课程表
+     *
      * @param xcChooseCourse
      * @return
      */
@@ -176,7 +180,8 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
 
     /**
      * 根据课程和用户查询[我的课程表]中某一门课程
-     * @param userId 用户id
+     *
+     * @param userId   用户id
      * @param courseId 课程id
      * @return 查询到的课程记录
      */
@@ -238,6 +243,26 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
         }
 
         return true;
+    }
+
+    @Override
+    public PageResult<XcCourseTables> getMycoursetables(MyCourseTableParams params) {
+        //get page num
+        long pageNo = params.getPage();
+        long pageSize = 4;
+        Page<XcCourseTables> page = new Page<>(pageNo, pageSize);
+
+        String userId = params.getUserId();
+
+        // 根据用户id&分页参数查询
+        LambdaQueryWrapper<XcCourseTables> queryWrapper = new LambdaQueryWrapper<XcCourseTables>().eq(XcCourseTables::getUserId, userId);
+        Page<XcCourseTables> pageResult = xcCourseTablesMapper.selectPage(page, queryWrapper);
+        List<XcCourseTables> records = pageResult.getRecords();
+
+        //记录总数 + 返回
+        long total = pageResult.getTotal();
+        return new PageResult<>(records, total, pageNo, pageSize);
+
     }
 
 
