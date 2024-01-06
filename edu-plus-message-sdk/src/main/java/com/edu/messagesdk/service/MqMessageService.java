@@ -10,8 +10,6 @@ import java.util.List;
  *  服务类
  * </p>
  *
- * @author itcast
- * @since 2022-09-21
  */
 public interface MqMessageService extends IService<MqMessage> {
 
