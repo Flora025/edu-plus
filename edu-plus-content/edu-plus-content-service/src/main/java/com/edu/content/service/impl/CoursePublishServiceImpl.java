@@ -21,13 +21,15 @@ import com.edu.content.service.CoursePublishService;
 import com.edu.content.service.TeachplanService;
 import com.edu.messagesdk.model.po.MqMessage;
 import com.edu.messagesdk.service.MqMessageService;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -40,6 +42,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -67,6 +71,9 @@ public class CoursePublishServiceImpl implements CoursePublishService {
 
     @Autowired
     MediaServiceClient mediaServiceClient;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     @Override
     public CoursePreviewDto getCoursePreviewInfo(Long courseId) {
@@ -243,6 +250,27 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
         return coursePublish;
     }
+
+    @Override
+    public CoursePublish getCoursePublishCache(Long courseId){
+        // 查询缓存
+        Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+        if (jsonObj != null) {
+            String jsonString = jsonObj.toString();
+            // System.out.println("=================from cache=================");
+            CoursePublish coursePublish = JSON.parseObject(jsonString, CoursePublish.class);
+            return coursePublish;
+        } else {
+            // System.out.println("from db...");
+            // retrieve data from db
+            CoursePublish coursePublish = getCoursePublish(courseId);
+            if (coursePublish != null) {
+                redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish));
+            }
+            return coursePublish;
+        }
+    }
+
 
     private void saveCoursePublishMessage(Long courseId) {
         MqMessage mqMessage = mqMessageService.addMessage("course_publish", String.valueOf(courseId), null, null);

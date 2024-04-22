@@ -6,7 +6,7 @@ import com.edu.content.model.dto.CoursePreviewDto;
 import com.edu.content.model.dto.TeachplanDto;
 import com.edu.content.model.po.CoursePublish;
 import com.edu.content.service.CoursePublishService;
-import io.swagger.annotations.ApiOperation;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+
+import io.swagger.annotations.ApiOperation;
 
 @Controller
 public class CoursePublishController {
@@ -65,7 +67,9 @@ public class CoursePublishController {
     public CoursePreviewDto getCoursePublish(@PathVariable("courseId") Long courseId) {
         //和上面一个不一样 这是给用户preview的
         //查询课程发布信息
-        CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        // CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        //get from cache
+        CoursePublish coursePublish = coursePublishService.getCoursePublishCache(courseId);
         if (coursePublish == null) {
             return new CoursePreviewDto();
         }
@@ -80,5 +84,8 @@ public class CoursePublishController {
         coursePreviewInfo.setTeachplans(teachplans);
         return coursePreviewInfo;
     }
+
+
+
 
 }

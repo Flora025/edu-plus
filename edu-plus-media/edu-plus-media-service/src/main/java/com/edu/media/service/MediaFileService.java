@@ -12,7 +12,6 @@ import java.io.File;
 
 /**
  * @description 媒资文件管理业务类
- * @date 2022/9/10 8:55
  */
 public interface MediaFileService {
 

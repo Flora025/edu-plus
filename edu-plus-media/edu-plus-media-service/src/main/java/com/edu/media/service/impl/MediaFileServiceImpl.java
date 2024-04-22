@@ -16,10 +16,7 @@ import com.edu.media.model.po.MediaProcess;
 import com.edu.media.service.MediaFileService;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
-import io.minio.*;
-import io.minio.messages.DeleteError;
-import io.minio.messages.DeleteObject;
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -30,13 +27,29 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import io.minio.ComposeObjectArgs;
+import io.minio.ComposeSource;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
+import io.minio.RemoveObjectsArgs;
+import io.minio.Result;
+import io.minio.UploadObjectArgs;
+import io.minio.messages.DeleteError;
+import io.minio.messages.DeleteObject;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @version 1.0
@@ -218,7 +231,7 @@ public class MediaFileServiceImpl implements MediaFileService {
             minioClient.uploadObject(testbucket);
 
             log.debug("上传文件到minio成功,bucket:{},objectName:{}", bucket, objectName);
-//            System.out.println("上传成功");
+            // System.out.println("上传成功");
             return true;
 
         } catch (Exception e) {
